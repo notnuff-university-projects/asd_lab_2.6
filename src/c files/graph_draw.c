@@ -68,25 +68,30 @@ void weight(int weight, int px, int py, int color) {
     XDrawString(dis, win, gc, px, py, str, str_size);
 }
 
-
 void draw_graph_vertices(graph_t *graph) {
     int size = graph->size;
-    for (int i = 0; i < size; i++) {
+    vertices_list_t *this_ver_p = graph->vertices_list_start;
+    while (this_ver_p) {
+        vertex_t *this_ver = this_ver_p->this_vertex;
         XSetForeground(dis, gc, 0xFFFFFF);
         XFillArc(dis, win, gc,
-                 graph_get_vertex(graph, i + 1)->x - POINT_RADIUS, graph_get_vertex(graph, i + 1)->y - POINT_RADIUS,
+                 this_ver->x - POINT_RADIUS, this_ver->y - POINT_RADIUS,
                  2 * POINT_RADIUS, 2 * POINT_RADIUS,
                  0, 360 * 64);
+
+        this_ver_p = this_ver_p->next_vertex_p;
     }
 
     XSetLineAttributes(dis, gc,
                        2,
                        LineSolid,
                        CapButt, JoinMiter);
-    for (int i = 0; i < size; i++) {
-        int line_size = i / 9 + 2;
-        vertex_t *this = graph_get_vertex(graph, i + 1);
-        switch (this->number) {
+
+    this_ver_p = graph->vertices_list_start;
+    while (this_ver_p) {
+        vertex_t *this_ver = this_ver_p->this_vertex;
+        int line_size = this_ver->number / 10 + 2;
+        switch (this_ver->number) {
             case 'N':
                 XSetForeground(dis, gc, 0x0000FF);
                 break;
@@ -107,15 +112,16 @@ void draw_graph_vertices(graph_t *graph) {
                            2,
                            LineSolid,
                            CapButt, JoinMiter);
-        XDrawString(dis, win, gc, this->x - 2, this->y + 4,
-                    this->name, line_size);
+        XDrawString(dis, win, gc, this_ver->x - 2, this_ver->y + 4,
+                    this_ver->name, line_size);
 
-        XDrawArc(dis, win, gc, this->x - POINT_RADIUS, this->y - POINT_RADIUS,
+        XDrawArc(dis, win, gc, this_ver->x - POINT_RADIUS, this_ver->y - POINT_RADIUS,
                  2 * POINT_RADIUS, 2 * POINT_RADIUS, 0, 360 * 64);
+
+        this_ver_p = this_ver_p->next_vertex_p;
 
     }
 }
-
 
 void draw_arc(vec_4_t *vector, int offset_radius, edge_t *edge, weights_list_t **weights_to_draw) {
     vec_2_t *vec = malloc(sizeof(vec_2_t));
@@ -170,6 +176,7 @@ void draw_arc(vec_4_t *vector, int offset_radius, edge_t *edge, weights_list_t *
         S = 360 * 64 + S;
 
     XSetForeground(dis, gc, edge ? edge->color : 0xFFFFFF);
+    XSetLineAttributes(dis, gc, edge? edge->thickness : 1, LineSolid, CapButt, JoinMiter);
 
     XDrawArc(dis, win, gc, center_x - rad2, center_y - rad2,
              2 * rad2, 2 * rad2, E, abs(S - E));
@@ -188,6 +195,7 @@ void draw_arc(vec_4_t *vector, int offset_radius, edge_t *edge, weights_list_t *
 void draw_line(vec_4_t *vector, edge_t *edge, weights_list_t **weights_to_draw) {
     int color = edge ? edge->color : 0xFFFFFF;
     XSetForeground(dis, gc, color);
+    XSetLineAttributes(dis, gc, edge ? edge->thickness : 1, LineSolid, CapButt, JoinMiter);
     XDrawLine(dis, win, gc, vector->start_x, vector->start_y, vector->end_x, vector->end_y);
 
     if (edge) {
@@ -295,7 +303,7 @@ void draw_edges(graph_t *graph, edges_list_t *edges, weights_list_t **weights_to
         edge_t *edge = edges->this_edge;
         vertex_t *v1 = graph_get_vertex(graph, edge->v1);
         vertex_t *v2 = graph_get_vertex(graph, edge->v2);
-
+        if (!v1 || !v2) return;
         XSetForeground(dis, gc, color);
         XSetLineAttributes(dis, gc, thickness, LineSolid, CapButt, JoinMiter);
 
@@ -322,7 +330,7 @@ void draw_edges(graph_t *graph, edges_list_t *edges, weights_list_t **weights_to
                 condition = 1;
 
         if (condition) {
-            int a = abs(v1->number - v2->number) % (size - 1) + abs(v1->number - v2->number) / (size - 1);
+            int a = abs(v1->number - v2->number) % size + abs(v1->number - v2->number) / size;
             switch (a) {
                 case 0:
                     XDrawArc(dis, win, gc, this_vec->start_x + 0.3 * POINT_RADIUS, this_vec->start_y,
@@ -339,7 +347,7 @@ void draw_edges(graph_t *graph, edges_list_t *edges, weights_list_t **weights_to
             draw_line(this_vec, edge, weights_to_draw);
         }
         free(this_vec); free(offset);
-        edges = edges->next_edge;
+        edges = edges->next_edge_p;
     }
 }
 
@@ -347,10 +355,17 @@ void draw_graph_weighted(graph_t *graph) {
     int size = graph->size;
     weights_list_t *weights_to_draw = NULL;
 
-    for (int i = 1; i <= size; i++) {
-        vertex_t *this_v = graph_get_vertex(graph, i);
-        edges_list_t *list_this_edge = this_v->edges;
+    vertices_list_t *this_v = graph->vertices_list_start;
+
+    while (this_v) {
+        vertex_t *this_vertex = this_v->this_vertex;
+        edges_list_t *list_this_edge = this_vertex->edges;
         draw_edges(graph, list_this_edge, &weights_to_draw);
+        this_v = this_v->next_vertex_p;
+    }
+
+    if(graph->minimal_edges_list) {
+        draw_edges(graph, graph->minimal_edges_list, &weights_to_draw);
     }
     weight_draw(weights_to_draw);
     weight_clear(&weights_to_draw);

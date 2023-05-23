@@ -19,5 +19,6 @@ void draw_graph_old(graph_t *graph, int **relation_matrix, int size, int red);
 
 void draw_graph_weighted(graph_t *graph);
 
+int count_digits(int number);
 
 #endif //INC_2_3_GRAPH_DRAW_H

@@ -24,11 +24,12 @@ typedef struct {
     int v2;
     int weight;
     int color;
+    int thickness;
 } edge_t;
 
 typedef struct edges_list {
     edge_t *this_edge;
-    struct edges_list *next_edge;
+    struct edges_list *next_edge_p;
 } edges_list_t;
 
 typedef struct vertex_t {
@@ -36,17 +37,20 @@ typedef struct vertex_t {
     char name[3];
     int x;
     int y;
-    struct vertex_t *next_vertex;
-    struct vertex_t *prev_vertex;
     edges_list_t *edges;
 } vertex_t;
+
+typedef struct vertices_list_t {
+    vertex_t *this_vertex;
+    struct vertices_list_t *next_vertex_p;
+} vertices_list_t;
 
 typedef struct {
     int size;
     int sides;
-    vertex_t *vertices_list_start;
-    vertex_t *vertices_list_end;
-    edges_list_t *edges_list;
+    vertices_list_t *vertices_list_start;
+    vertices_list_t *vertices_list_end;
+    edges_list_t *minimal_edges_list;
 } graph_t;
 
 typedef struct {

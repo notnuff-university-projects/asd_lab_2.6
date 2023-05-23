@@ -85,6 +85,12 @@ build CMakeFiles/2_6.dir/src/c_files/graph_functions.c.o: C_COMPILER__2_6_Debug 
   OBJECT_DIR = CMakeFiles/2_6.dir
   OBJECT_FILE_DIR = CMakeFiles/2_6.dir/src/c_files
 
+build CMakeFiles/2_6.dir/src/c_files/prime`s_algorithm.c.o: C_COMPILER__2_6_Debug /home/notnuff/ASD_labs/2$ sem/2.6/src/c$ files/prime`s_algorithm.c || cmake_object_order_depends_target_2_6
+  DEP_FILE = "CMakeFiles/2_6.dir/src/c_files/prime\`s_algorithm.c.o.d"
+  FLAGS = -g -fdiagnostics-color=always -std=gnu11
+  OBJECT_DIR = CMakeFiles/2_6.dir
+  OBJECT_FILE_DIR = CMakeFiles/2_6.dir/src/c_files
+
 
 # =============================================================================
 # Link build statements for EXECUTABLE target 2_6
@@ -93,7 +99,7 @@ build CMakeFiles/2_6.dir/src/c_files/graph_functions.c.o: C_COMPILER__2_6_Debug 
 #############################################
 # Link the executable 2_6
 
-build 2_6: C_EXECUTABLE_LINKER__2_6_Debug CMakeFiles/2_6.dir/main.c.o CMakeFiles/2_6.dir/src/c_files/matrix_math.c.o CMakeFiles/2_6.dir/src/c_files/graph_draw.c.o CMakeFiles/2_6.dir/src/c_files/vec_math_lib.c.o CMakeFiles/2_6.dir/src/c_files/X_routines.c.o CMakeFiles/2_6.dir/src/c_files/graph_functions.c.o
+build 2_6: C_EXECUTABLE_LINKER__2_6_Debug CMakeFiles/2_6.dir/main.c.o CMakeFiles/2_6.dir/src/c_files/matrix_math.c.o CMakeFiles/2_6.dir/src/c_files/graph_draw.c.o CMakeFiles/2_6.dir/src/c_files/vec_math_lib.c.o CMakeFiles/2_6.dir/src/c_files/X_routines.c.o CMakeFiles/2_6.dir/src/c_files/graph_functions.c.o CMakeFiles/2_6.dir/src/c_files/prime`s_algorithm.c.o
   FLAGS = -g
   LINK_LIBRARIES = -lX11  -lm
   OBJECT_DIR = CMakeFiles/2_6.dir
