@@ -37,20 +37,6 @@ vertex_t *graph_get_vertex(graph_t *graph, int index) {
     return NULL;
 }
 
-void print_vertices(graph_t *graph) {
-    vertices_list_t *this_ver_p = graph->vertices_list_start;
-    while (this_ver_p) {
-        vertex_t *this = this_ver_p->this_vertex;
-        printf("i = %i, coords: x = %d, y = %d\n", this->number, this->x, this->y);
-        this_ver_p = this_ver_p->next_vertex_p;
-    }
-}
-
-void print_graph(graph_t *graph) {
-    printf("size = %d, vertices:\n", graph->size);
-    print_vertices(graph);
-}
-
 graph_t *graph_create(int size, int sides) {
     double as_ratio = (double) SCREEN_HEIGHT / SCREEN_WIDTH;
 
@@ -125,7 +111,7 @@ void graph_set_weights(graph_t *graph, int **rel_mat, int **weight_mat) {
             if (rel_mat[i][j]) {
                 edge_t *this_edge = malloc(sizeof(edge_t));
                 int color = 0xFFFFFF * (double) rand() / (double) RAND_MAX;
-                *this_edge = (edge_t) {i + 1, j + 1, weight_mat[i][j], color, 1};
+                *this_edge = (edge_t) {i + 1, j + 1, weight_mat[i][j], color, 2};
                 vertex_t *ver1 = graph_get_vertex(graph, i + 1);
                 vertex_t *ver2 = graph_get_vertex(graph, j + 1);
                 if (ver1) edges_add(&(ver1->edges), this_edge);
@@ -200,6 +186,20 @@ void graph_clear_full(graph_t **graph) {
     *graph = NULL;
 }
 
+void print_vertices(graph_t *graph) {
+    vertices_list_t *this_ver_p = graph->vertices_list_start;
+    while (this_ver_p) {
+        vertex_t *this = this_ver_p->this_vertex;
+        printf("i = %i, coords: x = %d, y = %d\n", this->number, this->x, this->y);
+        this_ver_p = this_ver_p->next_vertex_p;
+    }
+}
+
+void print_graph(graph_t *graph) {
+    printf("size = %d, vertices:\n", graph->size);
+    print_vertices(graph);
+}
+
 void graph_print_ver_weights(graph_t *graph) {
     int size = graph->size;
     for (int i = 1; i <= size; i++) {
@@ -217,3 +217,4 @@ void graph_print_ver_weights(graph_t *graph) {
         printf("\n");
     }
 }
+
