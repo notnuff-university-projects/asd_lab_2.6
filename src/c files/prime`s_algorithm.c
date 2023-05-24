@@ -1,4 +1,4 @@
-#include "../prime`s_algorithm.h"
+#include "../prime_algorithm.h"
 
 void pr_algorithm(graph_t **visited_graph_p, graph_t *target_graph) {
     graph_t *v_graph = *visited_graph_p;
