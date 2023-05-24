@@ -9,7 +9,7 @@
 #include "src/X_routines.h"
 #include "src/graph_draw.h"
 #include "src/graph_functions.h"
-#include "src/prime`s_algorithm.h"
+#include "src/prime_algorithm.h"
 
 int n;
 
