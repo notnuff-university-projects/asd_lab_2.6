@@ -10,13 +10,17 @@
 #include "src/graph_draw.h"
 #include "src/graph_functions.h"
 #include "src/prime`s_algorithm.h"
+
 int n;
 
 int main() {
     int n1 = 2, n2 = 1, n3 = 2, n4 = 5;
     srand(n1 * 1000 + n2 * 100 + n3 * 10 + n4);
 
-    n = 5 + n3;
+    //you can choose size of the graph here
+    n = 10 + n3;
+
+    //you can choose number of sides of the graph here
     int sides = 3;
     double c = 1.0 - n3 * 0.01 - n4 * 0.005 - 0.05;
     double **service_mat;
@@ -78,6 +82,7 @@ int main() {
                                 graph_clear_full(&new_graph);
                                 graph_clear(&visited_graph);
                                 new_graph = graph_create(n, sides);
+
                                 graph_set_weights(new_graph, rel_mat, weight_mat);
                                 isP = 1;
 
